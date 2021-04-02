@@ -3,9 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Document</title>
+    <meta name="google-signin-client_id" content="831941671643-mvjpsv4cn30rhafu96rk0ddtcboi2df1.apps.googleusercontent.com">
 </head>
 <body>
-    <h1>Acceso Denegado</h1>
+    <h1>Google Signing</h1>
+    
+    
+    <hr>
+    
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    
+        <a href="#" onclick="signOut();">Sign out</a>
+
+    <script>
+        var url = (window.location.hostname.includes('localhost'))? 
+                    'http://localhost:3000/api/auth/google' : 'https://rest-server-prueba.herokuapp.com/api/auth/google'
+        function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+        console.log('Name: ' + profile.getName());
+        console.log('Image URL: ' + profile.getImageUrl());
+        console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+            
+        var id_token = googleUser.getAuthResponse().id_token;
+        const data = {id_token}
+        fetch(url,{
+
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(data)
+
+        }).then(resp=> resp.json())
+          .then(data=>console.log('Nuesto server',data))
+          .catch(console.log)
+
+    }
+
+    </script>
+
+<script>
+    function signOut() {
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+        console.log('User signed out.');
+      });
+    }
+  </script>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
 </body>
 </html>
