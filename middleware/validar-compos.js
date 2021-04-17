@@ -10,8 +10,6 @@ const EsAdminROle = (req=request,res=response,next)=>{
             msg:'Se quiere verificar el rol sin validar el token primero'
         });
 
-
-
     }
     const { rol,nombre} = req.usuario;
 
